@@ -4,6 +4,7 @@ public class JeopardyBoardButton extends JButton{
     private int row;
     private int column;
     private int pointValue;
+    private JeopardyQuestion question;
     public JeopardyBoardButton(int row, int column){
         this(row, column, (row + 1) * 100);
     }
@@ -13,6 +14,7 @@ public class JeopardyBoardButton extends JButton{
         this.row = row;
         this.column = column;
         this.pointValue = pointValue;
+        this.question = new JeopardyQuestion();
         this.setFocusable(false);
     }
 
@@ -24,5 +26,8 @@ public class JeopardyBoardButton extends JButton{
     }
     public int getPointValue(){
         return pointValue;
+    }
+    public JeopardyQuestion getQuestion(){
+        return question;
     }
 }

@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -17,6 +18,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     Color fontColor = new Color(0xFFD32C);
     int fontSize = 28;
     Font defaultFont = new Font("UTM Helvetins", Font.BOLD, fontSize);
+    ImageIcon jpdIcon = new ImageIcon("JPD.png");
 
     public JeopardyBoard(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,11 +26,14 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         this.setSize(1024, 512);
         this.setResizable(false);
         this.setBackground(Color.BLACK);
+        this.setIconImage(jpdIcon.getImage());
+
 
         LabelFactory(5);
         for(var l : categoryNames){
             this.add(l);
         }
+
 
         ButtonFactory(5, 5);
         for(var b : buttons){
