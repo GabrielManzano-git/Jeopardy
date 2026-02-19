@@ -13,15 +13,16 @@ public class JeopardyBoardButton extends JButton{
         this.row = row;
         this.column = column;
         this.pointValue = pointValue;
+        this.setFocusable(false);
     }
 
-    public int GetRow(){
+    public int getRow(){
         return row;
     }
-    public int GetColumn(){
+    public int getColumn(){
         return column;
     }
-    public int GetPointValue(){
+    public int getPointValue(){
         return pointValue;
     }
 }
