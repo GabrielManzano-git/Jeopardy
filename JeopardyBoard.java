@@ -89,7 +89,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
 
         //Create Q/A scene
-        qaPanel.setLayout(new BorderLayout(0, 10));
+        qaPanel.setLayout(new BorderLayout(0, 0));
         qaPanel.setBackground(Color.black);
         qPanel.setPreferredSize(new Dimension(100, 286));
         qPanel.setBackground(backgroundColor);
@@ -97,10 +97,10 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         aPanel.setBackground(backgroundColor);
         qLabel.setFont(defaultFont);
         qLabel.setBackground(backgroundColor);
-        qLabel.setForeground(fontColor);
+        qLabel.setForeground(Color.WHITE);
         aLabel.setFont(defaultFont);
         aLabel.setBackground(backgroundColor);
-        aLabel.setForeground(fontColor);
+        aLabel.setForeground(Color.WHITE);
         qaPanel.add(qPanel, BorderLayout.NORTH);
         qaPanel.add(aPanel, BorderLayout.SOUTH);
         qPanel.add(qLabel);
