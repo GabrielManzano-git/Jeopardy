@@ -5,20 +5,18 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class JeopardyBoard extends JFrame implements ActionListener{
     Color backgroundColor = new Color(0x060ce9);
@@ -46,7 +44,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     JButton revealAnswerButton = new JButton("Reveal Answer");
     JButton mainMenuButton = new JButton("Back to main");
 
-    public JeopardyBoard(){
+    public JeopardyBoard(Scanner inputFile){
         //Create main window with a card layout
         this.add(cardPanel);
         cardPanel.setLayout(cl);
