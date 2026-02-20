@@ -1,14 +1,14 @@
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayer;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -32,15 +32,26 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     ImageIcon jpdIcon = new ImageIcon("JPD.png");
     JPanel questionBoard = new JPanel();
     CardLayout cl = new CardLayout();
+    JPanel cardPanel = new JPanel();
     JLayeredPane layeredPane = new JLayeredPane();
+
+    JPanel qaPanel = new JPanel();
+    JPanel qPanel = new JPanel(new FlowLayout());
+    JPanel aPanel = new JPanel(new FlowLayout());
+    JLabel qLabel = new JLabel();
+    JLabel aLabel = new JLabel();
+    JButton revealAnswerButton = new JButton("Reveal Answer");
+    JButton mainMenuButton = new JButton("Back to main");
 
     public JeopardyBoard(){
         //Create main window with a card layout
-        this.setLayout(cl);
+        this.add(cardPanel);
+        cardPanel.setLayout(cl);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1024, 512);
+        this.setSize(1024, 582);
         this.setResizable(false);
         this.setBackground(Color.BLACK);
+        cardPanel.setBackground(Color.BLACK);
         this.setIconImage(jpdIcon.getImage());
 
 
@@ -48,7 +59,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         questionBoard.setLayout(gl);
         layeredPane.setLayout(new BorderLayout());
         layeredPane.add(questionBoard, null, JLayeredPane.DEFAULT_LAYER);
-        this.add(layeredPane);
+        cardPanel.add(layeredPane);
 
         //Create sample column names and buttons
         LabelFactory(5);
@@ -78,9 +89,34 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
 
         //Create Q/A scene
+        qaPanel.setLayout(new BorderLayout(0, 10));
+        qaPanel.setBackground(Color.black);
+        qPanel.setPreferredSize(new Dimension(100, 286));
+        qPanel.setBackground(backgroundColor);
+        aPanel.setPreferredSize(new Dimension(100, 286));
+        aPanel.setBackground(backgroundColor);
+        qLabel.setFont(defaultFont);
+        qLabel.setBackground(backgroundColor);
+        qLabel.setForeground(fontColor);
+        aLabel.setFont(defaultFont);
+        aLabel.setBackground(backgroundColor);
+        aLabel.setForeground(fontColor);
+        qaPanel.add(qPanel, BorderLayout.NORTH);
+        qaPanel.add(aPanel, BorderLayout.SOUTH);
+        qPanel.add(qLabel);
+        qPanel.add(revealAnswerButton);
+        revealAnswerButton.setFocusable(false);
+        revealAnswerButton.addActionListener(e -> revealAnswer());
+        aPanel.add(aLabel);
+        aPanel.add(mainMenuButton);
+        mainMenuButton.setFocusable(false);
+        mainMenuButton.addActionListener(e -> {cl.first(cardPanel);});
+        cardPanel.add(qaPanel);
+
 
 
         //Show board
+        cl.first(cardPanel);
         this.setVisible(true);
     }
 
@@ -103,6 +139,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
                 newButton.setText("$" + newButton.getPointValue());
                 newButton.addActionListener(e -> {
                     currentButton = newButton;
+                    doBoardButtonClick();
                     System.out.println("You pressed a button of value: " + newButton.getPointValue());});
                 newButton.setBackground(backgroundColor);
                 newButton.setForeground(fontColor);
@@ -114,6 +151,21 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
     public JeopardyBoardButton getCurrentButton(){
         return currentButton;
+    }
+
+    public void doBoardButtonClick(){
+        setQuestionAnswer();
+        cl.last(cardPanel);
+    }
+
+    private void setQuestionAnswer(){
+        if(currentButton == null) return;
+        qLabel.setText(currentButton.getQuestion().getQuestion());
+        aLabel.setText("");
+    }
+
+    private void revealAnswer(){
+        aLabel.setText(currentButton.getQuestion().getAnswer());
     }
 
     @Override

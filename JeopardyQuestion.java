@@ -1,6 +1,6 @@
 public class JeopardyQuestion {
-    String question;
-    String answer;
+    private String question;
+    private String answer;
     public JeopardyQuestion(){
         question = "default question";
         answer = "default answer";
@@ -10,4 +10,13 @@ public class JeopardyQuestion {
         this.question = question;
         this.answer = answer;
     }
+
+    public String getQuestion(){
+        return question;
+    }
+
+    public String getAnswer(){
+        return answer;
+    }
+
 }
