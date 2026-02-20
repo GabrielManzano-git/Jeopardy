@@ -28,13 +28,19 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     List<JeopardyBoardButton> buttons = new ArrayList<>();
     JeopardyBoardButton currentButton = null;
     
-    GridLayout gl = new GridLayout(6, 5);
+    int numRows = 5;
+    int numColumns = 5;
+    GridLayout gl;
+
+    Scanner in = null;
     
-    ImageIcon jpdIcon = new ImageIcon("JPD.png");
+    ImageIcon jpdIcon = new ImageIcon("jpdLogo.png");
     JPanel questionBoard = new JPanel();
     CardLayout cl = new CardLayout();
     JPanel cardPanel = new JPanel();
     JLayeredPane layeredPane = new JLayeredPane();
+
+    JPanel scoreBoardPanel;
 
     JPanel qaPanel = new JPanel();
     JPanel qPanel = new JPanel(new FlowLayout());
@@ -46,6 +52,11 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
     public JeopardyBoard(Scanner inputFile){
         //Create main window with a card layout
+        if(inputFile != null){
+            in = inputFile;
+            numColumns = Integer.parseInt(in.nextLine());
+            numRows = Integer.parseInt(in.nextLine());
+        }
         this.add(cardPanel);
         cardPanel.setLayout(cl);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +68,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
 
         //Prepare the question board
+        gl = new GridLayout(numRows + 1, numColumns);
         questionBoard.setLayout(gl);
         layeredPane.setLayout(new BorderLayout());
         layeredPane.add(questionBoard, null, JLayeredPane.DEFAULT_LAYER);
@@ -64,30 +76,22 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         cl.addLayoutComponent(layeredPane, "Question Select Board");
 
         //Create sample column names and buttons
-        LabelFactory(5);
+        LabelFactory(numColumns);
         for(var l : categoryNames){
             questionBoard.add(l);
         }
 
 
-        ButtonFactory(5, 5);
+        ButtonFactory(numRows, numColumns);
         for(var b : buttons){
             questionBoard.add(b);
         }
 
         //Create area for player scoreboards
-        JPanel scoreBoardPanel = new JPanel();
+        scoreBoardPanel = new JPanel();
         scoreBoardPanel.setLayout(new FlowLayout());
         scoreBoardPanel.setBackground(backgroundColor);
         layeredPane.add(scoreBoardPanel, BorderLayout.SOUTH, JLayeredPane.PALETTE_LAYER);
-
-
-        //Create sample player scoreboard
-        PlayerScoreboard sampleBoard = new PlayerScoreboard("Test name", this);
-        scoreBoardPanel.add(sampleBoard);
-
-        PlayerScoreboard sampleBoard2 = new PlayerScoreboard("Test name 2", this);
-        scoreBoardPanel.add(sampleBoard2);
 
 
         //Create Q/A scene
@@ -111,23 +115,41 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         mainMenuButton.addActionListener(e -> {cl.show(cardPanel, "Question Select Board");});
         cardPanel.add(qaPanel);
         cl.addLayoutComponent(qaPanel, "QA Board");
+    }
 
-
-
+    public void start(){
         //Show board
         cl.show(cardPanel, "Question Select Board");
         this.setVisible(true);
     }
 
-    private void LabelFactory(int rows){
-        for(int i = 0; i < rows; i++){
-            JLabel newLabel = new JLabel("Default label: " + i);
-            newLabel.setHorizontalAlignment(JLabel.CENTER);
-            newLabel.setBackground(backgroundColor);
-            newLabel.setOpaque(true);
-            newLabel.setForeground(fontColor);
-            newLabel.setFont(defaultFont);
-            categoryNames.add(newLabel);
+    public void addPlayer(String playerName){
+        if(playerName == null || playerName.equals("")) return;
+        PlayerScoreboard newBoard = new PlayerScoreboard(playerName, this);
+        scoreBoardPanel.add(newBoard);
+    }
+
+    private void LabelFactory(int columns){
+        if(in == null){
+            for(int i = 0; i < columns; i++){
+                JLabel newLabel = new JLabel("Default label: " + i);
+                newLabel.setHorizontalAlignment(JLabel.CENTER);
+                newLabel.setBackground(backgroundColor);
+                newLabel.setOpaque(true);
+                newLabel.setForeground(fontColor);
+                newLabel.setFont(defaultFont);
+                categoryNames.add(newLabel);
+            } 
+        } else{
+            for(int i = 0; i < columns; i++){
+                JLabel newLabel = new JLabel(in.nextLine());
+                newLabel.setHorizontalAlignment(JLabel.CENTER);
+                newLabel.setBackground(backgroundColor);
+                newLabel.setOpaque(true);
+                newLabel.setForeground(fontColor);
+                newLabel.setFont(defaultFont);
+                categoryNames.add(newLabel);
+            }
         }
     }
 
@@ -150,18 +172,40 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     }
 
     private void ButtonFactory(int rows, int columns){
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++){
-                JeopardyBoardButton newButton = new JeopardyBoardButton(i, j);
-                newButton.setText("$" + newButton.getPointValue());
-                newButton.addActionListener(e -> {
+        if(in == null){
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < columns; j++){
+                    JeopardyBoardButton newButton = new JeopardyBoardButton(i, j);
+                    newButton.setText("$" + newButton.getPointValue());
+                    newButton.addActionListener(e -> {
                     currentButton = newButton;
-                    doBoardButtonClick();
-                    System.out.println("You pressed a button of value: " + newButton.getPointValue());});
-                newButton.setBackground(backgroundColor);
-                newButton.setForeground(fontColor);
-                newButton.setFont(defaultFont);
-                buttons.add(newButton);
+                        doBoardButtonClick();
+                        System.out.println("You pressed a button of value: " + newButton.getPointValue());});
+                    newButton.setBackground(backgroundColor);
+                    newButton.setForeground(fontColor);
+                    newButton.setFont(defaultFont);
+                    buttons.add(newButton);
+                }
+            }
+        } else{
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < columns; j++){
+                    JeopardyBoardButton newButton = new JeopardyBoardButton(
+                        i, j,
+                        Integer.parseInt(in.nextLine()),
+                        in.nextLine(),
+                        in.nextLine()
+                    );
+                    newButton.setText("$" + newButton.getPointValue());
+                    newButton.addActionListener(e -> {
+                    currentButton = newButton;
+                        doBoardButtonClick();
+                        System.out.println("You pressed a button of value: " + newButton.getPointValue());});
+                    newButton.setBackground(backgroundColor);
+                    newButton.setForeground(fontColor);
+                    newButton.setFont(defaultFont);
+                    buttons.add(newButton);
+                }
             }
         }
     } 
@@ -183,6 +227,8 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
     private void revealAnswer(){
         aLabel.setText(currentButton.getQuestion().getAnswer());
+        currentButton.setAnswered();
+        currentButton.setForeground(Color.RED);
     }
 
     @Override

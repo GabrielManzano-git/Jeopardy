@@ -1,0 +1,20 @@
+"JPD"
+# categories(n)
+# rows in a category(m)
+Name of category 1
+...
+Name of category n
+q1 value            //Start of question 1
+q1 question
+q1 answer
+...
+qn value
+qn question
+qn answer
+qn + 1 value
+qn + 1 question
+qn + 1 answer
+...
+qn*m value
+qn*m question
+qn*m answer

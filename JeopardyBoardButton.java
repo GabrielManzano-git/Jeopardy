@@ -39,4 +39,8 @@ public class JeopardyBoardButton extends JButton{
     public boolean getAnswered(){
         return isAnswered;
     }
+
+    public void setAnswered(){
+        isAnswered = true;
+    }
 }
