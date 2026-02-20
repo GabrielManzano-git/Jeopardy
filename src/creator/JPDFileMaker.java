@@ -38,8 +38,13 @@ public class JPDFileMaker extends JFrame{
             catList.add(newCat);
             this.add(newCat);
         }
-        for(int i = 0; i < 30; i++){
+        for(int i = 0; i < rows; i++){
             this.add(new JPDBlankPanel());
+            for(int j = 0; j < columns; j++){
+                JPDQuestion newQuestion = new JPDQuestion();
+                qList.add(newQuestion);
+                this.add(newQuestion);
+            }
         }
 
         this.setSize(1536,582);
