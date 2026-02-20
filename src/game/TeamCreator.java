@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -30,7 +32,6 @@ public class TeamCreator extends JFrame {
         JeopardyBoard jb = new JeopardyBoard(s);
 
         teamNameField = new JTextField();
-        teamNameField.setToolTipText("Enter team name...");
         teamNameField.setPreferredSize(new Dimension(200, 30));
         teamNameField.addActionListener(e ->  {jb.addPlayer(teamNameField.getText()); teamNameField.setText("");});
 

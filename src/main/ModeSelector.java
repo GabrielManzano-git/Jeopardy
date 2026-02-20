@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import creator.JPDFileMaker;
 import game.FileSelector;
 
 public class ModeSelector extends JFrame {
@@ -24,11 +25,13 @@ public class ModeSelector extends JFrame {
         makeFileButton.setBackground(backgroundColor);
         makeFileButton.setFont(defaultFont);
         makeFileButton.addActionListener(e -> goToFileMaker());
+        makeFileButton.setFocusable(false);
 
         JButton playButton = new JButton("Play jeopardy");
         playButton.setBackground(backgroundColor);
         playButton.setFont(defaultFont);
         playButton.addActionListener(e -> goToGame());
+        playButton.setFocusable(false);
 
         this.add(makeFileButton);
         this.add(playButton);
@@ -37,6 +40,7 @@ public class ModeSelector extends JFrame {
     }
 
     private void goToFileMaker(){
+        new JPDFileMaker();
         this.dispose();
     }
     private void goToGame(){
