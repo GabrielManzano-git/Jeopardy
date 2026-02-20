@@ -1,3 +1,4 @@
+package game;
 public class JeopardyQuestion {
     private String question;
     private String answer;
