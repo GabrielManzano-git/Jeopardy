@@ -11,7 +11,7 @@ public class JeopardyBoardButton extends JButton{
     }
 
     public JeopardyBoardButton(int row, int column, int pointValue){
-        this(row, column, pointValue, "Default Question", "Default Answer");
+        this(row, column, pointValue, "Default Question blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah", "Default Answer");
     }
 
     public JeopardyBoardButton(int row, int column, int pointValue, String question, String answer){

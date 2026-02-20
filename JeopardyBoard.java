@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -14,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +41,8 @@ public class JeopardyBoard extends JFrame implements ActionListener{
     JPanel qaPanel = new JPanel();
     JPanel qPanel = new JPanel(new FlowLayout());
     JPanel aPanel = new JPanel(new FlowLayout());
-    JLabel qLabel = new JLabel();
-    JLabel aLabel = new JLabel();
+    JTextArea qLabel = new JTextArea();
+    JTextArea aLabel = new JTextArea();
     JButton revealAnswerButton = new JButton("Reveal Answer");
     JButton mainMenuButton = new JButton("Back to main");
 
@@ -49,7 +52,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         cardPanel.setLayout(cl);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1024, 582);
-        this.setResizable(false);
+        //this.setResizable(false);
         this.setBackground(Color.BLACK);
         cardPanel.setBackground(Color.BLACK);
         this.setIconImage(jpdIcon.getImage());
@@ -60,6 +63,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
         layeredPane.setLayout(new BorderLayout());
         layeredPane.add(questionBoard, null, JLayeredPane.DEFAULT_LAYER);
         cardPanel.add(layeredPane);
+        cl.addLayoutComponent(layeredPane, "Question Select Board");
 
         //Create sample column names and buttons
         LabelFactory(5);
@@ -89,34 +93,31 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
 
         //Create Q/A scene
-        qaPanel.setLayout(new BorderLayout(0, 0));
+        qaPanel.setLayout(new GridLayout(2, 1, 10, 10));
         qaPanel.setBackground(Color.black);
-        qPanel.setPreferredSize(new Dimension(100, 286));
         qPanel.setBackground(backgroundColor);
-        aPanel.setPreferredSize(new Dimension(100, 286));
+        qPanel.setLayout(new BorderLayout());
+        aPanel.setLayout(new BorderLayout());
         aPanel.setBackground(backgroundColor);
-        qLabel.setFont(defaultFont);
-        qLabel.setBackground(backgroundColor);
-        qLabel.setForeground(Color.WHITE);
-        aLabel.setFont(defaultFont);
-        aLabel.setBackground(backgroundColor);
-        aLabel.setForeground(Color.WHITE);
-        qaPanel.add(qPanel, BorderLayout.NORTH);
-        qaPanel.add(aPanel, BorderLayout.SOUTH);
+        setupLabel(qLabel);
+        setupLabel(aLabel);
+        qaPanel.add(qPanel);
+        qaPanel.add(aPanel);
         qPanel.add(qLabel);
-        qPanel.add(revealAnswerButton);
+        qPanel.add(revealAnswerButton, BorderLayout.EAST);
         revealAnswerButton.setFocusable(false);
         revealAnswerButton.addActionListener(e -> revealAnswer());
         aPanel.add(aLabel);
-        aPanel.add(mainMenuButton);
+        aPanel.add(mainMenuButton, BorderLayout.EAST);
         mainMenuButton.setFocusable(false);
-        mainMenuButton.addActionListener(e -> {cl.first(cardPanel);});
+        mainMenuButton.addActionListener(e -> {cl.show(cardPanel, "Question Select Board");});
         cardPanel.add(qaPanel);
+        cl.addLayoutComponent(qaPanel, "QA Board");
 
 
 
         //Show board
-        cl.first(cardPanel);
+        cl.show(cardPanel, "Question Select Board");
         this.setVisible(true);
     }
 
@@ -130,6 +131,24 @@ public class JeopardyBoard extends JFrame implements ActionListener{
             newLabel.setFont(defaultFont);
             categoryNames.add(newLabel);
         }
+    }
+
+    private void setupLabel(JTextArea label){
+        // Enable line wrapping
+        label.setLineWrap(true);
+
+        // Enable wrapping by word (not character) for better readability
+        label.setWrapStyleWord(true);
+
+        
+
+        // Make it look like a JLabel
+        label.setEditable(false); // Make it non-editable
+        label.setOpaque(false); // Make background transparent
+        label.setFocusable(false); // Prevent it from getting focus
+        label.setBackground(backgroundColor); // Match JLabel background
+        label.setFont(defaultFont); // Match JLabel font
+        label.setForeground(Color.WHITE);
     }
 
     private void ButtonFactory(int rows, int columns){
@@ -155,7 +174,7 @@ public class JeopardyBoard extends JFrame implements ActionListener{
 
     public void doBoardButtonClick(){
         setQuestionAnswer();
-        cl.last(cardPanel);
+        cl.show(cardPanel, "QA Board");
     }
 
     private void setQuestionAnswer(){
