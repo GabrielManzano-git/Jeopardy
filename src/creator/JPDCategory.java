@@ -22,7 +22,7 @@ public class JPDCategory extends JPanel{
 
         this.setLayout(new FlowLayout());
 
-        textField = new JTextField();
+        textField = new JTextField(this.category);
         textField.setFont(defaultFont);
         textField.setPreferredSize(new Dimension(96, 50));;
 
