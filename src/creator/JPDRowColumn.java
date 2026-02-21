@@ -71,10 +71,12 @@ public class JPDRowColumn extends JPanel {
     }
 
     public int getRows(){
+        rows = Integer.parseInt(rowField.getText());
         return rows;
     }
 
     public int getCols(){
+        columns = Integer.parseInt(colField.getText());
         return columns;
     }
 }

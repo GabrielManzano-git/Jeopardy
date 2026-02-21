@@ -228,6 +228,72 @@ public class JPDFileMaker extends JFrame{
     }
 
     void refreshBoard(int rows, int columns){
+        int newRows = rowCol.getRows();
+        int newColumns = rowCol.getCols();
+        gl = new GridLayout(newRows + 1, newColumns + 1, 5, 5);
+        this.setLayout(gl);
 
+        for(var b : blankList){
+            this.remove(b);
+        } blankList.clear();
+        for(var c : catList){
+            this.remove(c);
+        }
+        for(var l : qListList){
+            for(var q : l){
+                this.remove(q);
+            }
+        }
+
+        while(catList.size() > newColumns){
+            catList.remove(newColumns);
+        }
+        for(var l : qListList){
+            while(l.size() > newColumns){
+                l.remove(newColumns);
+            }
+        }
+
+        while(qListList.size() > newRows){
+            qListList.remove(newRows);
+        }
+
+        while(catList.size() < newColumns){
+            JPDCategory newCat = new JPDCategory("");
+            catList.add(newCat);
+        }
+        for(var l : qListList){
+            while(l.size() < newColumns){
+                JPDQuestion newQuestion = new JPDQuestion();
+                l.add(newQuestion);
+            }
+        }
+
+        while(qListList.size() < newRows){
+            List<JPDQuestion> newList = new ArrayList<>();
+            for(int i = 0; i < newColumns; i++){
+                JPDQuestion newQuestion = new JPDQuestion();
+                newList.add(newQuestion);
+            }
+            qListList.add(newList);
+        }
+
+        for(var c : catList){
+            this.add(c);
+        }
+        for(var l : qListList){
+            JPDBlankPanel newBlank = new JPDBlankPanel();
+            this.add(newBlank);
+            blankList.add(newBlank);
+            for(var q : l){
+                this.add(q);
+            }
+        }
+
+        rows = newRows;
+        columns = newColumns;
+
+        this.revalidate();
+        this.repaint();
     }
 }
