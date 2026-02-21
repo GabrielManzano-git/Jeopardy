@@ -26,7 +26,9 @@ public class JPDFileMaker extends JFrame{
 
     GridLayout gl;
 
+    JPDRowColumn rowCol = new JPDRowColumn(this, 5, 5);
     List<JPDCategory> catList = new ArrayList<>();
+    List<JPDBlankPanel> blankList = new ArrayList<>();
     List<List<JPDQuestion>> qListList = new ArrayList<>();
 
     JFileChooser fileChooser = new JFileChooser();
@@ -39,44 +41,22 @@ public class JPDFileMaker extends JFrame{
     JMenuItem saveAs = new JMenuItem("Save As");
     JMenuItem newFile = new JMenuItem("New");
 
-    public JPDFileMaker(File inFile){
-        this.currentFile = inFile;
-
-        readFile();
-
-        menuBar.add(fileMenu);
-        fileMenu.add(openFile);
-        fileMenu.add(saveFile);
-        fileMenu.add(saveAs);
-        fileMenu.add(newFile);
-        openFile.addActionListener(e -> doOpenFile());
-        saveFile.addActionListener(e -> doSaveFile());
-        saveAs.addActionListener(e -> doSaveAs());
-        newFile.addActionListener(e -> doNewFile());
-
-        this.setJMenuBar(menuBar);
-
-        this.setSize(1536,582);
-        this.setBackground(Color.BLACK);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        this.setVisible(true);
-    }
-
     public JPDFileMaker(){
         rows = 5;
         columns = 5;
 
         gl = new GridLayout(rows + 1, columns + 1, 5, 5);
         this.setLayout(gl);
-        this.add(new JPDRowColumn(this, rows, columns));
+        this.add(rowCol);
         for(int i = 0; i < columns; i++){
             JPDCategory newCat = new JPDCategory(null);
             catList.add(newCat);
             this.add(newCat);
         }
         for(int i = 0; i < rows; i++){
-            this.add(new JPDBlankPanel());
+            JPDBlankPanel newPanel = new JPDBlankPanel();
+            blankList.add(newPanel);
+            this.add(newPanel);
             List<JPDQuestion> nList = new ArrayList<>();
             qListList.add(nList);
             for(int j = 0; j < columns; j++){
@@ -113,8 +93,8 @@ public class JPDFileMaker extends JFrame{
             return;
         }
         currentFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-        new JPDFileMaker(currentFile);
-        this.dispose();
+        clearBoard();
+        readFile();
     }
 
     private void doSaveFile(){
@@ -133,8 +113,36 @@ public class JPDFileMaker extends JFrame{
     }
 
     private void doNewFile(){
-        new JPDFileMaker();
-        this.dispose();
+        rows = 5;
+        columns = 5;
+        rowCol.setRows(rows);
+        rowCol.setCols(columns);
+
+        clearBoard();
+
+        gl = new GridLayout(rows + 1, columns + 1, 5, 5);
+        this.setLayout(gl);
+
+        for(int i = 0; i < columns; i++){
+            JPDCategory newCat = new JPDCategory(null);
+            catList.add(newCat);
+            this.add(newCat);
+        }
+        for(int i = 0; i < rows; i++){
+            JPDBlankPanel newPanel = new JPDBlankPanel();
+            blankList.add(newPanel);
+            this.add(newPanel);
+            List<JPDQuestion> nList = new ArrayList<>();
+            qListList.add(nList);
+            for(int j = 0; j < columns; j++){
+                JPDQuestion newQuestion = new JPDQuestion();
+                nList.add(newQuestion);
+                this.add(newQuestion);
+            }
+        }
+
+        this.revalidate();
+        this.repaint();
     }
 
     private void readFile(){
@@ -148,11 +156,8 @@ public class JPDFileMaker extends JFrame{
             rows = Integer.parseInt(in.nextLine());
             gl = new GridLayout(rows + 1, columns + 1, 5, 5);
             this.setLayout(gl);
-
-            this.add(new JPDRowColumn(this, rows, columns));
-
-            catList.clear();
-            qListList.clear();
+            rowCol.setRows(rows);
+            rowCol.setCols(columns);
 
             for(int i = 0; i < columns; i++){
                 JPDCategory newCat = new JPDCategory(in.nextLine());
@@ -161,7 +166,9 @@ public class JPDFileMaker extends JFrame{
             }
 
             for(int i = 0; i < rows; i++){
-                this.add(new JPDBlankPanel());
+                JPDBlankPanel newBlank = new JPDBlankPanel();
+                this.add(newBlank);
+                blankList.add(newBlank);
                 List<JPDQuestion> newList = new ArrayList<>();
                 qListList.add(newList);
                 for(int j = 0; j < columns; j++){
@@ -173,6 +180,9 @@ public class JPDFileMaker extends JFrame{
                     this.add(newQuestion);
                 }
             }
+
+            this.revalidate();
+            this.repaint();
 
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "File could not be opened", "File error", JOptionPane.ERROR_MESSAGE);
@@ -197,6 +207,24 @@ public class JPDFileMaker extends JFrame{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "File could not be opened", "File error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void clearBoard(){
+        for(var a : catList){
+            this.remove(a);
+        }
+        catList.clear();
+        for(var a : blankList){
+            this.remove(a);
+        }
+        blankList.clear();
+        for(var a : qListList){
+            for(var b : a){
+                this.remove(b);
+            }
+            a.clear();
+        }
+        qListList.clear();
     }
 
     void refreshBoard(int rows, int columns){

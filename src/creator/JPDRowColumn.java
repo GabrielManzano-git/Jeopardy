@@ -59,4 +59,22 @@ public class JPDRowColumn extends JPanel {
         this.add(new JPDBlankPanel());
         this.add(refreshButton);
     }
+
+    public void setRows(int rows){
+        this.rows = rows;
+        rowField.setText("" + rows);
+    }
+
+    public void setCols(int cols){
+        this.columns = cols;
+        colField.setText("" + cols);
+    }
+
+    public int getRows(){
+        return rows;
+    }
+
+    public int getCols(){
+        return columns;
+    }
 }
